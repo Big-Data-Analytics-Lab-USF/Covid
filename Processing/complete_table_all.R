@@ -1,21 +1,18 @@
 # FOR USF SAIL
 # Dre, Mihir
 
+
+# This script will take JSON files as arguments, parse certain fields, then store fields into CSV.
+
+
+
 options(scipen = 999999)
-#install.packages("dplyr",repos='http://cran.us.r-project.org')
 library("dplyr")
-#install.packages("readr",repos='http://cran.us.r-project.org')
 library("readr")
-#install.packages("stringr",repos='http://cran.us.r-project.org')
 library("stringr")
-#install.packages("tidyselect",repos='http://cran.us.r-project.org')
 library("tidyselect")
-#install.packages("ndjson", repos='http://cran.us.r-project.org')
-library("ndjson")#, lib.loc="/tmp/RtmpDG5v7Q/downloaded_packages")
-#install.packages("doParallel")
-#library("doParallel")
+library("ndjson")
 library("data.table")
-# creates a list of all json files in dir as a full string
 
 #--------------------------------------------- Parllel logic----------------------------------------------------#
 #fileNames <- fileNames_all
@@ -50,14 +47,10 @@ message("starting with...")
 message(endLocation_pre)
 
 parsedTweets <- ndjson::stream_in(fileLocation, cls="dt") %>% dplyr::filter(lang == "en")
-#parsedTweets2 <- ndjson::stream_in("/Users/dre/Downloads/coronaVirus/demo/2020-05-29-04.json", cls="dt") %>% dplyr::filter(lang == "en")
 
-# data <- files %>%
-#         map_df(~fromJSON(file.path(path, .), flatten = TRUE))
+
 # Remove all the NA's in the dataframe
-#parsedTweets <- gsub("NA", "", parsedTweets)
 parsedTweets[parsedTweets == "NA"]  <- ""
-#na.omit(parsedTweets)
 
 ##------------------------------ Combine all the multiple columns into one, by '|'---------------------------#
 
@@ -594,8 +587,11 @@ distinct_dat2 <-  distinct_dat %>%
 parsedTweets2 <- distinct_dat2
 
 #--------------------
+# file locations
+#--------------------
 
-replyDataLoc <- "/shares_bgfs/si_twitter/covid19/tables/reply_to/" #change your too DreD
+
+replyDataLoc <- "/shares_bgfs/si_twitter/covid19/tables/reply_to/" 
 locationDataLoc <- "/shares_bgfs/si_twitter/covid19/tables/location/"
 userDataLoc <- "/shares_bgfs/si_twitter/covid19/tables/user/"
 tweetDataLoc <- "/shares_bgfs/si_twitter/covid19/tables/tweet/"
@@ -603,13 +599,18 @@ hashtagDataLoc <- "/shares_bgfs/si_twitter/covid19/tables/hashtag/"
 mentHashDataLoc <- "/shares_bgfs/si_twitter/covid19/tables/mention_hashtags/"
 quotedDataLoc <- "/shares_bgfs/si_twitter/covid19/tables/quoted/"
 
-
+#--------------------
+# Get names for file
+#--------------------
 endLocation_pre <- substr(fileLocation, 41, 53)
 
+
+#--------------------
+# Write csv to folder
+#--------------------
 readr::write_excel_csv(x = locationData, path = paste0(locationDataLoc,endLocation_pre, "_locationTable.csv"))
-#readr::write_excel_csv(x = hashtagData, path = paste0(hashtagDataLoc,endLocation_pre, "_hashtagTable.csv"))
 readr::write_excel_csv(x = parsedTweets2, path = paste0(mentHashDataLoc,endLocation_pre, "_mentionHastagsTable.csv"))
-# 
+
 readr::write_excel_csv(x = replyData, path = paste0(replyDataLoc,endLocation_pre, "_replyTable.csv"))
 readr::write_excel_csv(x = tweetData, path = paste0(tweetDataLoc,endLocation_pre, "_tweetData.csv"))
 readr::write_excel_csv(x = userData, path = paste0(userDataLoc,endLocation_pre, "_userData.csv"))
