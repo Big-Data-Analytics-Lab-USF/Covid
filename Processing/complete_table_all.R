@@ -3,9 +3,6 @@
 
 
 # This script will take JSON files as arguments, parse certain fields, then store fields into CSV.
-
-
-
 options(scipen = 999999)
 library("dplyr")
 library("readr")
@@ -28,35 +25,21 @@ args <- commandArgs(trailingOnly = FALSE)
 fileNames_all <- args[6] #list.files("/shares_bgfs/si_twitter/Dred-MPColab/Mary_files_April_jsons/", "*.jsonl$", full.names = FALSE)
 fileLocation <- fileNames_all
 
-endLocation_pre <- substr(fileLocation, 41, 53)
+endLocation_pre <- substr(fileLocation, 41, 53) # parse date from file name. 
 
-# creates a list of all json files in dir as a shortname
-#fileNamesShort <- list.files("/shares_bgfs/si_twitter/covid19/USC_March_jsonls_Need_Conversions/", "*_part1.jsonl$", full.names = FALSE)
-# creates likst off all csv files in completed dir
-#finishedFiles <- list.files("/shares_bgfs/si_twitter/covid19/processedCSVs/", "*.csv", full.names = FALSE)
-# establishes output file location
-#parsedFolder <- "/Users/dre/Downloads/coronaVirus/test-folder/"
-#print(parsedFolder)
-#endlocationPost <- paste0(parsedFolder, endLocation_pre, ".csv")
-#print(endlocationPost)
-#for(i in seq_along(fileNames_all)) {
 #-------------------------------- Read in the json/l files ---------------------------------------------------#
 #fileNames_all[i]
 #read the json here and make whatever
 message("starting with...")
 message(endLocation_pre)
 
-parsedTweets <- ndjson::stream_in(fileLocation, cls="dt") %>% dplyr::filter(lang == "en")
+parsedTweets <- ndjson::stream_in(fileLocation, cls="dt") %>% dplyr::filter(lang == "en") # read JSON file and filter on english tweets
 
 
-# Remove all the NA's in the dataframe
-parsedTweets[parsedTweets == "NA"]  <- ""
+parsedTweets[parsedTweets == "NA"]  <- "" # Remove all the NA's in the dataframe
 
 ##------------------------------ Combine all the multiple columns into one, by '|'---------------------------#
 
-#*************TO DO*************#
-#* CONVERT THESE TO FUNCTION    #
-#*******************************#
 
 # Then here, & because we only care about the column names, we will read only the first row of the file
 multi_cols_names <- colnames(parsedTweets)
