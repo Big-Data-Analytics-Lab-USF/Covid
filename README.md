@@ -1,2 +1,2 @@
-# Big Data Analyitics Lab - Covid-19 Lab work
+# Big Data Analytics Lab - Covid-19 Lab work
 
