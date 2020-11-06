@@ -1,8 +1,9 @@
 # FOR USF SAIL
 # Dre, Mihir
-
-
 # This script will take JSON files as arguments, parse certain fields, then store fields into CSV.
+
+
+
 options(scipen = 999999)
 library("dplyr")
 library("readr")
